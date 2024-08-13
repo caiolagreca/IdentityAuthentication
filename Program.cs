@@ -1,7 +1,7 @@
 using IdentityAuthentication.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-
 namespace IdentityAuthentication
 {
     public class Program
@@ -16,19 +16,22 @@ namespace IdentityAuthentication
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //AddDefaultIdentity configura os Servi�os do Identity. Voc� pode usar optionspara configurar o comportamento da API do
+            //AddDefaultIdentity configura os Servi�os do Identity. Voc� pode usar options para configurar o comportamento da API do
             //Identity.
             //O AddEntityFrameworkStores configura o Identity para usar o Entity Framework Core . Tamb�m precisamos especificar o tipo do Context que vamos usar para os Stores.
-            builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
+            Console.WriteLine($"WebRootPath: {app.Environment.WebRootPath}");
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
